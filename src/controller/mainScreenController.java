@@ -1,8 +1,10 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import jdk.nashorn.api.tree.RegExpLiteralTree;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import java.util.Random;
 
@@ -13,16 +15,93 @@ public class mainScreenController
     @FXML
     public void generatePassword()
     {
-        String is = getNumber();
-        is = getSpecialSign();
-        String sis = getLetter();
-        is = getLower(getLetter());
+        String password = "";
+        try {
+            if (checkboxPrefix.isSelected()) password += getFix(Integer.parseInt(amountPrefix.getText()));
+            password += textPassword.getText();
+            if (checkboxPostfix.isSelected()) password += getFix(Integer.parseInt(amountPostfix.getText()));
+        } catch (Exception e) {
+            password = "Błąd danych!";
+        }
 
-        labelPassword.setText(is);
+        labelPassword.setText(password);
+
+    }
+    /**
+     *  Tworzenie hasła
+     */
+
+    private String getFix(int amountOfSign)
+    {
+        String result = "";
+
+        for(int i = amountOfSign; i > 0; i--)
+        {
+            result += getSign();
+        }
+
+        return result;
     }
 
+    private String getSign()
+    {
+        String result = "0";
+
+        int amountOfOpiton = 1;
+        if(checkNumber.isSelected()) amountOfOpiton += 1;
+        if(checkLowCase.isSelected()) amountOfOpiton += 1;
+        if(checkUpperCase.isSelected()) amountOfOpiton += 1;
+        if(checkSpecialSign.isSelected()) amountOfOpiton += 1;
+
+        String[] option = new String[amountOfOpiton + 1];
+
+            amountOfOpiton = 0;
+            option[0] = "zero";
+            if (checkNumber.isSelected()) {
+                amountOfOpiton += 1;
+                option[amountOfOpiton] = "Number";
+            }
+            if (checkLowCase.isSelected()) {
+                amountOfOpiton += 1;
+                option[amountOfOpiton] = "LowCase";
+            }
+            if (checkUpperCase.isSelected()) {
+                amountOfOpiton += 1;
+                option[amountOfOpiton] = "UpperCase";
+            }
+            if (checkSpecialSign.isSelected()) {
+                amountOfOpiton += 1;
+                option[amountOfOpiton] = "SpecialSign";
+            }
+
+        Random generator = new Random();
+
+        switch(option[generator.nextInt(amountOfOpiton + 1)])
+        {
+            case "Number":{
+                result = getNumber();
+            }break;
+            case "LowCase":{
+                result = getLower(getLetter());
+            }break;
+            case "UpperCase":{
+                result = getLetter();
+            }break;
+            case "SpecialSign":{
+                result = getSpecialSign();
+            }break;
+
+            default:{
+                result = "0";
+            }
+        }
+
+        return result;
+    }
+
+
     /**
-     *  --------------
+     *  Generatory
      */
 
     private String getNumber()
@@ -161,20 +240,47 @@ public class mainScreenController
 
     private String getLower(String result)
     {
-        Random generate = new Random();
-
-        if( (generate.nextInt(100) % 2) == 0 )
-        {
-            result = result.toLowerCase();
-        }
-
-        return result;
+        return result.toLowerCase();
     }
 
     /**
      *  --------------
      */
 
+    public void initialize()
+    {
+        amountPrefix.setText("3");
+        amountPostfix.setText("4");
+
+        checkboxPostfix.setSelected(true);
+        checkSpecialSign.setSelected(true);
+        checkUpperCase.setSelected(true);
+        checkNumber.setSelected(true);
+        checkLowCase.setSelected(true);
+
+        textPassword.setText("Pwd");
+    }
+
     @FXML
     Label labelPassword = new Label();
+
+    @FXML
+    CheckBox checkboxPrefix = new CheckBox();
+    @FXML
+    CheckBox checkboxPostfix = new CheckBox();
+    @FXML
+    CheckBox checkLowCase = new CheckBox();
+    @FXML
+    CheckBox checkUpperCase = new CheckBox();
+    @FXML
+    CheckBox checkNumber = new CheckBox();
+    @FXML
+    CheckBox checkSpecialSign = new CheckBox();
+
+    @FXML
+    TextField textPassword = new TextField();
+    @FXML
+    TextField amountPrefix = new TextField();
+    @FXML
+    TextField amountPostfix = new TextField();
 }
