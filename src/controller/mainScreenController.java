@@ -25,7 +25,7 @@ public class mainScreenController
         }
 
         labelPassword.setText(password);
-
+        textResultPassword.setText(password);
     }
     /**
      *  Tworzenie hasła
@@ -76,7 +76,10 @@ public class mainScreenController
 
         Random generator = new Random();
 
-        switch(option[generator.nextInt(amountOfOpiton + 1)])
+        int test = generator.nextInt(amountOfOpiton + 1);
+        if(test == 0 && amountOfOpiton > 0) test ++;
+
+        switch(option[test])
         {
             case "Number":{
                 result = getNumber();
@@ -259,6 +262,8 @@ public class mainScreenController
         checkLowCase.setSelected(true);
 
         textPassword.setText("Pwd");
+
+        generatePassword();
     }
 
     @FXML
@@ -283,4 +288,6 @@ public class mainScreenController
     TextField amountPrefix = new TextField();
     @FXML
     TextField amountPostfix = new TextField();
+    @FXML
+    TextField textResultPassword = new TextField();
 }

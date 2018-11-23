@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Generator Haseł2">
+    <output-path>$PROJECT_DIR$/out/artifacts/Generator_Hase2</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="main.Main" />
+        <option name="description" value="" />
+        <option name="height" value="550" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="Generator" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+        <option name="width" value="500" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="Generator_Hase.jar">
+        <element id="module-output" name="Generator Haseł" />
+      </element>
+    </root>
+  </artifact>
+</component>

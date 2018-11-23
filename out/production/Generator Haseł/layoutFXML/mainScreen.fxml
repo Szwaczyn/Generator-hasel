@@ -105,11 +105,16 @@
                <children>
                   <Label fx:id="labelPassword" alignment="CENTER" contentDisplay="CENTER" prefHeight="49.0" prefWidth="456.0" text="Hasło">
                      <font>
-                        <Font size="26.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
                </children>
             </StackPane>
+            <TextField fx:id="textResultPassword" prefHeight="16.0" prefWidth="420.0" text="as">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
          </children>
       </VBox>
    </children>
