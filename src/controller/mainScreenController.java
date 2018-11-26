@@ -1,4 +1,4 @@
-package controller;
+﻿package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -20,6 +20,10 @@ public class mainScreenController
             if (checkboxPrefix.isSelected()) password += getFix(Integer.parseInt(amountPrefix.getText()));
             password += textPassword.getText();
             if (checkboxPostfix.isSelected()) password += getFix(Integer.parseInt(amountPostfix.getText()));
+
+	    StringSelection selection = new StringSelection(password);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(selection, selection);
         } catch (Exception e) {
             password = "Błąd danych!";
         }
