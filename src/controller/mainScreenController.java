@@ -4,13 +4,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.Random;
 
 public class mainScreenController
 {
     Random generator = new Random();
+
+    boolean isSpecialSign;
+    boolean isUpperCase;
+    boolean isLowerCase;
+    boolean isNumber;
 
     @FXML
     public void generatePassword()
@@ -21,7 +28,7 @@ public class mainScreenController
             password += textPassword.getText();
             if (checkboxPostfix.isSelected()) password += getFix(Integer.parseInt(amountPostfix.getText()));
 
-	    StringSelection selection = new StringSelection(password);
+            StringSelection selection = new StringSelection(password);
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
         } catch (Exception e) {
@@ -30,6 +37,7 @@ public class mainScreenController
 
         labelPassword.setText(password);
         textResultPassword.setText(password);
+        setSignToGenerate();
     }
     /**
      *  Tworzenie hasła
@@ -59,24 +67,24 @@ public class mainScreenController
 
         String[] option = new String[amountOfOpiton + 1];
 
-            amountOfOpiton = 0;
-            option[0] = "zero";
-            if (checkNumber.isSelected()) {
-                amountOfOpiton += 1;
-                option[amountOfOpiton] = "Number";
-            }
-            if (checkLowCase.isSelected()) {
-                amountOfOpiton += 1;
-                option[amountOfOpiton] = "LowCase";
-            }
-            if (checkUpperCase.isSelected()) {
-                amountOfOpiton += 1;
-                option[amountOfOpiton] = "UpperCase";
-            }
-            if (checkSpecialSign.isSelected()) {
-                amountOfOpiton += 1;
-                option[amountOfOpiton] = "SpecialSign";
-            }
+        amountOfOpiton = 0;
+        option[0] = "zero";
+        if (checkNumber.isSelected()) {
+            amountOfOpiton += 1;
+            option[amountOfOpiton] = "Number";
+        }
+        if (checkLowCase.isSelected()) {
+            amountOfOpiton += 1;
+            option[amountOfOpiton] = "LowCase";
+        }
+        if (checkUpperCase.isSelected()) {
+            amountOfOpiton += 1;
+            option[amountOfOpiton] = "UpperCase";
+        }
+        if (checkSpecialSign.isSelected()) {
+            amountOfOpiton += 1;
+            option[amountOfOpiton] = "SpecialSign";
+        }
 
         Random generator = new Random();
 
@@ -86,16 +94,52 @@ public class mainScreenController
         switch(option[test])
         {
             case "Number":{
-                result = getNumber();
+                if(!isNumber){
+                    isNumber = true;
+                    result = getNumber();
+                }
+                else if(isAllSignNeeded()){
+                    result = getNumber();
+                }
+                else{
+                    result = getSignNeed();
+                }
             }break;
             case "LowCase":{
-                result = getLower(getLetter());
+                if(!isLowerCase){
+                    isLowerCase = true;
+                    result = getLower(getLetter());
+                }
+                else if(isAllSignNeeded()){
+                    result = getLower(getLetter());
+                }
+                else{
+                    result = getSignNeed();
+                }
             }break;
             case "UpperCase":{
-                result = getLetter();
+                if(!isUpperCase){
+                    isUpperCase = true;
+                    result = getLetter();
+                }
+                else if(isAllSignNeeded()){
+                    result = getLetter();
+                }
+                else{
+                    result = getSignNeed();
+                }
             }break;
             case "SpecialSign":{
-                result = getSpecialSign();
+                if(!isSpecialSign){
+                    isSpecialSign = true;
+                    result = getSpecialSign();
+                }
+                else if(isAllSignNeeded()){
+                    result = getSpecialSign();
+                }
+                else{
+                    result = getSignNeed();
+                }
             }break;
 
             default:{
@@ -104,6 +148,38 @@ public class mainScreenController
         }
 
         return result;
+    }
+
+    private boolean isAllSignNeeded()
+    {
+        boolean result = false;
+        if(isNumber && isLowerCase && isSpecialSign && isUpperCase) {
+            result = true;
+        }
+
+        return result;
+    }
+
+    private String getSignNeed()
+    {
+
+        if(!isNumber){
+            isNumber = true;
+            return getNumber();
+        }
+        else if(!isUpperCase){
+            isUpperCase = true;
+            return getLetter();
+        }
+        else if(!isSpecialSign){
+            isSpecialSign = true;
+            return getSpecialSign();
+        }
+        else if(!isLowerCase){
+            isLowerCase = true;
+            return getLower(getLetter());
+        }
+        else return "0";
     }
 
 
@@ -256,8 +332,8 @@ public class mainScreenController
 
     public void initialize()
     {
-        amountPrefix.setText("3");
-        amountPostfix.setText("4");
+        amountPrefix.setText("0");
+        amountPostfix.setText("5");
 
         checkboxPostfix.setSelected(true);
         checkSpecialSign.setSelected(true);
@@ -267,8 +343,27 @@ public class mainScreenController
 
         textPassword.setText("Pwd");
 
+        isUpperCase = true;
+        isLowerCase = true;
+        isNumber = true;
+        isSpecialSign = true;
+
+        setSignToGenerate();
+
         generatePassword();
+
+
     }
+
+    @FXML
+    public void setSignToGenerate()
+    {
+        if(checkLowCase.isSelected()) { isLowerCase = false; }
+        if(checkSpecialSign.isSelected()) { isSpecialSign = false; }
+        if(checkNumber.isSelected()) { isNumber = false; }
+        if(checkUpperCase.isSelected()) { isUpperCase = false; }
+    }
+
 
     @FXML
     Label labelPassword = new Label();
